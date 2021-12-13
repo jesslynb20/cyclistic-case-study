@@ -1,6 +1,6 @@
 Langkah analisis:
 1. Mencari hari apa yang paling banyak terdapat peminjaman sepeda dari casual riders dan annual members. Hal ini dilakukan dengan mencari modus;
-2. Mencari rata-rata jumlah pemakai sepeda untuk setiap hari. Contoh: rata-rata terdapat 4714 casual riders dan 4795 annual member yang memakai sepeda pada hari Minggu;
+2. Mencari rata-rata jumlah pemakai sepeda per hari. Contoh: rata-rata terdapat 4714 casual riders dan 4795 annual member yang memakai sepeda pada hari Minggu;
 3. Mencari tipe sepeda apa yang paling banyak dipinjam oleh casual riders dan annual members. Hal ini juga dilakukan dengan mencari modus;
 4. Mencari tipe sepeda apa yang paling banyak dipinjam oleh casual riders dan annual members untuk setiap harinya. Hal ini untuk melihat apakah ada trend;
 5. Mencari rata-rata jumlah pemakai per hari berdasarkan tipe sepeda;
