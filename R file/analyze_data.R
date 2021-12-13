@@ -27,18 +27,17 @@ mode_rideable_type <- no_null_trip_data %>%
   summarise(mode = mode(rideable_type))
 print(mode_rideable_type)
 
+mode_rideable_type_day_of_week <- no_null_trip_data %>% 
+  group_by(member_casual, day_of_week) %>% 
+  summarise(mode = mode(rideable_type))
+print(mode_rideable_type_day_of_week)
+
 number_of_riders_rideable_type <- no_null_trip_data %>% 
   group_by(rideable_type) %>% 
   count(member_casual)
 mean_riders_rideable_type <- number_of_riders_rideable_type
 mean_riders_rideable_type$mean_riders <- number_of_riders_rideable_type$n / 364
 print(mean_riders_rideable_type)
-
-mode_rideable_type_day_of_week <- no_null_trip_data %>% 
-  group_by(member_casual, day_of_week) %>% 
-  summarise(mode = mode(rideable_type))
-print(mode_rideable_type_day_of_week)
-
 
 mean_min_max<- no_null_trip_data %>% 
   group_by(member_casual) %>% 
