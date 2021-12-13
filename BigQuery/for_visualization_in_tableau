@@ -1,0 +1,94 @@
+/*Semua kode di bawah ini digunakan untuk keperluan visualisasi. Kode-kode ini di bawah ini digunakan untuk mengambil data yang diperlukan
+untuk visualisasi di Tableau*/
+
+SELECT 
+    member_casual,
+    day_of_week,
+    COUNT(member_casual) / COUNT(DISTINCT CAST(started_at AS date)) AS mean_riders_per_day,
+    COUNT(member_casual) AS number_of_riders
+FROM (
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_2020_Q1`
+    UNION ALL 
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202004`
+    UNION ALL
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202005`
+    UNION ALL 
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202006`
+    UNION ALL 
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202007`
+    UNION ALL
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202008`
+    UNION ALL 
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202009`
+    UNION ALL
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202010`
+    UNION ALL 
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202011`
+    UNION ALL
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202012`
+)
+GROUP BY 
+    member_casual, day_of_week
+ORDER BY    
+    member_casual, day_of_week;
+
+SELECT 
+    member_casual,
+    rideable_type,
+    COUNT(rideable_type) / 364 AS mean_riders_per_day,
+    COUNT(rideable_type) AS number_of_riders
+FROM (
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_2020_Q1`
+    UNION ALL 
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202004`
+    UNION ALL
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202005`
+    UNION ALL 
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202006`
+    UNION ALL 
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202007`
+    UNION ALL
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202008`
+    UNION ALL 
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202009`
+    UNION ALL
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202010`
+    UNION ALL 
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202011`
+    UNION ALL
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202012`
+)
+GROUP BY 
+    member_casual, rideable_type
+ORDER BY    
+    member_casual, rideable_type;
+
+SELECT 
+    member_casual,
+    CAST(started_at AS date) AS date_of_use,
+    COUNT(member_casual) AS number_of_riders
+FROM (
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_2020_Q1`
+    UNION ALL 
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202004`
+    UNION ALL
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202005`
+    UNION ALL 
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202006`
+    UNION ALL 
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202007`
+    UNION ALL
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202008`
+    UNION ALL 
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202009`
+    UNION ALL
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202010`
+    UNION ALL 
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202011`
+    UNION ALL
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202012`
+)
+GROUP BY
+    member_casual, started_at
+ORDER BY 
+    member_casual, started_at
