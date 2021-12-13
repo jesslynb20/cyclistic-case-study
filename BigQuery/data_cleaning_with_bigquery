@@ -1,0 +1,34 @@
+SELECT  
+   *,
+   (ended_at - started_at) AS ride_length,
+   EXTRACT(DAYOFWEEK FROM started_at) AS day_of_week
+FROM 
+    `cyclistic-case-study-333904.12_months_trip_data.202012` 
+WHERE 
+    ride_id IS NOT NULL 
+    AND  
+    rideable_type IS NOT NULL
+    AND 
+    started_at IS NOT NULL
+    AND 
+    ended_at IS NOT NULL 
+    AND 
+    start_station_name IS NOT NULL
+    AND
+    start_station_id IS NOT NULL
+    AND 
+    end_station_name IS NOT NULL
+    AND
+    end_station_id IS NOT NULL 
+    AND
+    start_lat IS NOT NULL 
+    AND
+    start_lng IS NOT NULL 
+    AND 
+    end_lat IS NOT NULL 
+    AND 
+    end_lng IS NOT NULL 
+    AND 
+    member_casual IS NOT NULL
+    AND 
+    ended_at > started_at
