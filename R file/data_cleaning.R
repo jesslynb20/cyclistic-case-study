@@ -1,4 +1,15 @@
-trip_data <- rbind(Divvy_Trips_2020_Q1, `202004.divvy.tripdata`,`202005.divvy.tripdata`, `202006.divvy.tripdata`,`202007.divvy.tripdata`,`202008.divvy.tripdata`,`202009.divvy.tripdata`,`202010.divvy.tripdata`,`202011.divvy.tripdata`,`202012.divvy.tripdata`)
+data_q1 <- read.csv("Divvy_Trips_2020_Q1.csv")
+data_04 <- read.csv("202004-divvy-tripdata.csv")
+data_05 <- read.csv("202004-divvy-tripdata.csv")
+data_06 <- read.csv("202004-divvy-tripdata.csv")
+data_07 <- read.csv("202004-divvy-tripdata.csv")
+data_08 <- read.csv("202004-divvy-tripdata.csv")
+data_09 <- read.csv("202004-divvy-tripdata.csv")
+data_10 <- read.csv("202004-divvy-tripdata.csv")
+data_11 <- read.csv("202004-divvy-tripdata.csv")
+data_12 <- read.csv("202004-divvy-tripdata.csv")
+
+trip_data <- rbind(data_q1, data_04, data_05, data_06, data_07, data_08, data_09, data_10, data_11, data_12)
 no_null_trip_data <- na.omit(trip_data)
 no_null_trip_data <- subset(no_null_trip_data, ended_at > started_at)
 
