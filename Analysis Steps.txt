@@ -1,11 +1,11 @@
 Langkah analisis:
-1. Mencari hari apa yang paling banyak terdapat peminjaman sepeda dari casual members dan annual members. Hal ini dilakukan dengan mencari modus;
-2. Mencari rata-rata jumlah pemakai sepeda untuk setiap hari. Contoh: rata-rata terdapat 4714 casual members dan 4795 annual member yang memakai sepeda pada hari Minggu;
-3. Mencari tipe sepeda apa yang paling banyak dipinjam oleh casual members dan annual members. Hal ini juga dilakukan dengan mencari modus;
-4. Mencari tipe sepeda apa yang paling banyak dipinjam oleh casual members dan annual members untuk setiap harinya. Hal ini untuk melihat apakah ada trend;
+1. Mencari hari apa yang paling banyak terdapat peminjaman sepeda dari casual riders dan annual members. Hal ini dilakukan dengan mencari modus;
+2. Mencari rata-rata jumlah pemakai sepeda untuk setiap hari. Contoh: rata-rata terdapat 4714 casual riders dan 4795 annual member yang memakai sepeda pada hari Minggu;
+3. Mencari tipe sepeda apa yang paling banyak dipinjam oleh casual riders dan annual members. Hal ini juga dilakukan dengan mencari modus;
+4. Mencari tipe sepeda apa yang paling banyak dipinjam oleh casual riders dan annual members untuk setiap harinya. Hal ini untuk melihat apakah ada trend;
 5. Mencari rata-rata jumlah pemakai per hari berdasarkan tipe sepeda;
-4. Mencari mean, min, dan max dari ride_length dari casual members dan annual members;
-5. Mencari mean, min, dan max dari ride_length dari casual members dan annual members. Hal ini untuk melihat apakah ada trend.
-6. Mencari jumlah pemakai untuk setiap bulan. Contoh: terdapat 7785 casual members dan 136099 annual members pada bulan Januari 2020.
+4. Mencari mean, min, dan max dari ride_length dari casual riders dan annual members;
+5. Mencari mean, min, dan max dari ride_length dari casual riders dan annual members untuk setiap harinya. Hal ini untuk melihat apakah ada trend;
+6. Mencari jumlah pemakai untuk setiap bulan. Contoh: terdapat 7785 casual riders dan 136099 annual members pada bulan Januari 2020.
 
 Catatan: Langkah analisis yang dilakukan di BigQuery dan RStudio sama.
