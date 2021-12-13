@@ -1,0 +1,13 @@
+Langkah data cleaning di BigQuery:
+1. Import setiap file .csv ke BigQuery;
+2. Dengan menggunakan query dilakukan hal berikut:
+	a. Mengambil setiap baris dari setiap tabel yang tidak mengandung null dan ended_at > started_at; 
+	b. Menambah dua kolom baru, yaitu ride_length (=ended_at-started_at) dan day_of_week (menunjukkan hari dari tanggal yang 	diberikan);
+3. Menyimpan setiap hasil query sebagai tabel BigQuery baru;
+
+Langkah data cleaning di RStudio:
+1. Import setiap file .csv ke RStudio;
+2. Menggabungkan setiap dataset menjadi satu dataset dan memasukkannya ke dalam sebuah variabel baru(trip_data);
+3. Menghilangkan setiap baris yang mengandung NA dan memasukkan hasilnya ke dalam sebuah variabel baru(no_null_trip_data);
+4. Mengambil setiap baris dengan ended_at > started_at dan memasukkan hasilnya ke dalam variabel no_null_trip_data;
+5. Menambah tiga kolom baru pada no_null_trip data, yaitu ride_length (jarak antara ended_at dan started_at), day_of_week (hari pada started_at), dan month (bulan pada started_at)
