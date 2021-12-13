@@ -1,0 +1,208 @@
+/* Kode di bawah ini untuk mencari hari dimana terdapat banyak pemakai sepeda berdasarkan tipe pemakainya (member atau casual)*/
+SELECT
+    member_casual,
+    day_of_week AS mode_day_of_week
+FROM(
+   SELECT 
+        member_casual,
+        day_of_week,
+        ROW_NUMBER() OVER(PARTITION BY member_casual ORDER BY COUNT(day_of_week) DESC) AS rn,
+    FROM (
+        SELECT member_casual, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_2020_Q1`
+        UNION ALL 
+        SELECT member_casual, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202004`
+        UNION ALL
+        SELECT member_casual, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202005`
+        UNION ALL 
+        SELECT member_casual, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202006`
+        UNION ALL 
+        SELECT member_casual, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202007`
+        UNION ALL
+        SELECT member_casual, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202008`
+        UNION ALL 
+        SELECT member_casual, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202009`
+        UNION ALL
+        SELECT member_casual, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202010`
+        UNION ALL 
+        SELECT member_casual, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202011`
+        UNION ALL
+        SELECT member_casual, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202012`
+    )
+    GROUP BY 
+        member_casual, day_of_week
+)
+WHERE 
+    rn = 1;
+
+/*Kode di bawah ini untuk mencari rata-rata pemakai sepeda berdasarkan hari dan tipe pemakainya*/
+SELECT 
+    member_casual,
+    day_of_week,
+    COUNT(member_casual) / COUNT(DISTINCT CAST(started_at AS date)) AS mean_riders_per_day
+FROM (
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_2020_Q1`
+    UNION ALL 
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202004`
+    UNION ALL
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202005`
+    UNION ALL 
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202006`
+    UNION ALL 
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202007`
+    UNION ALL
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202008`
+    UNION ALL 
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202009`
+    UNION ALL
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202010`
+    UNION ALL 
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202011`
+    UNION ALL
+    SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202012`
+)
+GROUP BY 
+    member_casual, day_of_week
+ORDER BY    
+    member_casual, day_of_week;
+
+/*Kode di bawah ini untuk mencari tipe sepeda apa yang paling banyak dipakai.
+Kode ini bisa dimodifikasi. Jika ingin melihat tipe sepeda yang paling banyak dipakai hanya berdasarkan tipe pemakainya, silakan hapus day_of_week.
+JIka ingin mencari tipe sepeda yang paling banyak dipakai berdasarkan tipe pemakai dan hari, kode di bawah ini tidak perlu diubah*/
+SELECT
+    member_casual,
+    day_of_week,
+    rideable_type AS mode_rideale_type
+FROM(
+   SELECT 
+        member_casual,
+        rideable_type,
+        day_of_week,
+        ROW_NUMBER() OVER(PARTITION BY member_casual, day_of_week ORDER BY day_of_week, COUNT(rideable_type) DESC) AS rn,
+    FROM (
+        SELECT member_casual, rideable_type, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_2020_Q1`
+        UNION ALL 
+        SELECT member_casual, rideable_type, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202004`
+        UNION ALL
+        SELECT member_casual, rideable_type, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202005`
+        UNION ALL 
+        SELECT member_casual, rideable_type, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202006`
+        UNION ALL 
+        SELECT member_casual, rideable_type, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202007`
+        UNION ALL
+        SELECT member_casual, rideable_type, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202008`
+        UNION ALL 
+        SELECT member_casual, rideable_type, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202009`
+        UNION ALL
+        SELECT member_casual, rideable_type, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202010`
+        UNION ALL 
+        SELECT member_casual, rideable_type, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202011`
+        UNION ALL
+        SELECT member_casual, rideable_type, day_of_week FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202012`
+    )
+    GROUP BY 
+        member_casual, day_of_week, rideable_type
+)
+WHERE 
+    rn = 1
+ORDER BY 
+    member_casual, day_of_week;
+
+/*Kode di bawah ini untuk mencari rata-rata pemakai sepeda berdasarkan tipe pemakai dan tipe sepeda*/
+SELECT 
+    member_casual,
+    rideable_type,
+    COUNT(rideable_type) / 364 AS mean_riders_per_day,
+FROM (
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_2020_Q1`
+    UNION ALL 
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202004`
+    UNION ALL
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202005`
+    UNION ALL 
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202006`
+    UNION ALL 
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202007`
+    UNION ALL
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202008`
+    UNION ALL 
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202009`
+    UNION ALL
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202010`
+    UNION ALL 
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202011`
+    UNION ALL
+    SELECT member_casual, rideable_type FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202012`
+)
+GROUP BY 
+    member_casual, rideable_type
+ORDER BY    
+    member_casual, rideable_type;
+
+/*Kode di bawah ini untuk mencari rata-rata, minimum, dan maksimum ride_length.
+ride_length adalah jarak antara started_at dan ended_at
+Kode ini bia dimodifikasi, Jika ingin berdasarkan tipe pemakainya saja, silakan hapus day_of_week.
+Jika ingin berdasarkan tipe pemakai dan hari, kode d bawah ini tidak peru diganti*/
+SELECT 
+    member_casual,
+    day_of_week,
+    AVG(ride_length) AS mean_ride_length,
+    MIN(ride_length) AS min_ride_length,
+    MAX(ride_length) AS max_ride_length
+FROM(
+    SELECT member_casual, day_of_week, ride_length FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_2020_Q1`
+    UNION ALL 
+    SELECT member_casual, day_of_week, ride_length FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202004`
+    UNION ALL
+    SELECT member_casual, day_of_week, ride_length FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202005`
+    UNION ALL 
+    SELECT member_casual, day_of_week, ride_length FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202006`
+    UNION ALL 
+    SELECT member_casual, day_of_week, ride_length FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202007`
+    UNION ALL
+    SELECT member_casual, day_of_week, ride_length FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202008`
+    UNION ALL 
+    SELECT member_casual, day_of_week, ride_length FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202009`
+    UNION ALL
+    SELECT member_casual, day_of_week, ride_length FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202010`
+    UNION ALL 
+    SELECT member_casual, day_of_week, ride_length FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202011`
+    UNION ALL
+    SELECT member_casual, day_of_week, ride_length FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202012`
+)
+GROUP BY 
+    member_casual, day_of_week
+ORDER BY 
+    member_casual,day_of_week;
+
+/*Kode di bawah ini untuk mencari jumlah pemakai setiap bulan*/
+SELECT * FROM(
+    SELECT 
+        member_casual,
+        EXTRACT(MONTH FROM started_at) AS month,
+        COUNT(member_casual) AS number_of_riders
+    FROM (
+        SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_2020_Q1`
+        UNION ALL 
+        SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202004`
+        UNION ALL
+        SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202005`
+        UNION ALL 
+        SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202006`
+        UNION ALL 
+        SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202007`
+        UNION ALL
+        SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202008`
+        UNION ALL 
+        SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202009`
+        UNION ALL
+        SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202010`
+        UNION ALL 
+        SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202011`
+        UNION ALL
+        SELECT member_casual, day_of_week, started_at FROM `cyclistic-case-study-333904.12_months_trip_data.no_null_202012`
+    )
+    GROUP BY
+        member_casual, EXTRACT(MONTH FROM started_at)
+)
+ORDER BY 
+     member_casual, month
