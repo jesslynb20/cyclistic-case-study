@@ -2,7 +2,7 @@
 title: "Cyclistic Case Study Report"
 author: "Jesslyn"
 date: "12/13/2021"
-output: html_document
+output: word_document
 ---
 
 # Cyclistic Case Study  
@@ -15,9 +15,9 @@ Dibanding menarik pelanggan baru untuk menjadi *annual members*, finance analyst
 
 ## Ask
 Terdapat tiga pertanyaan yang perlu dijawab dalam analisis ini agar dapat menemukan cara untuk menerik *casual riders* menjadi *annual members*:  
-1. Apa perilaku yang membedakan *casual riders* dengan *annual memebrs*?  
+1. Apa perilaku yang membedakan *casual riders* dengan *annual members*?  
 2. Menagapa *casual riders* mau membeli *annual membership*?  
-3. Bagaimana cara Cyclistic menggunakan media digital agar dapat mempengaruhi *casual riders* untuk menjadi *annual riders*?
+3. Bagaimana cara Cyclistic menggunakan media digital agar dapat mempengaruhi *casual riders* untuk menjadi *annual members*?
 
 ## Prepare
 [Dataset](https://divvy-tripdata.s3.amazonaws.com/index.html) yang digunakan dalam case study ini berasal dari Motivate International Inc. dengan [lisensi](https://www.divvybikes.com/data-license-agreement).
@@ -159,7 +159,7 @@ print(number_of_riders_per_month)
 ## Share
 Pada bagian ini, dilakukasi visualisasi data. Berikut ini adalah beberapa plot beserta penjelasannya:  
 
-1.Jumlah pemakai berdasarkan hari  
+1. Jumlah pemakai berdasarkan hari  
 ```{r number of riders by day of week plot}
 library(ggplot2)
 
@@ -174,7 +174,7 @@ Plot di atas memberikan beberapa informasi berikut:
 a. Jumlah *casual riders* terbanyak pada hari *weekends* dalam peiode Januari 2020 hingga Desember 2020;  
 b. Jumlah *casual riders* jauh lebih rendah pada hari *weekdays* dalam periode Januari 2020 hingga Desember 2020;  
 c. Jumlah *annual members* terbanyak pada hari *weekdays* dalam periode Januari 2020 hingga Desember 2020;  
-d. Jumlah *annual members* pada hari *weekends* lebih rendah dibanding pada hari *weekdays*, tetapi perbedaannya tidak begitu jauh.
+d. Jumlah *annual members* pada hari *weekends* lebih rendah dibanding pada hari *weekdays*, tetapi perbedaannya tidak begitu jauh.  
 
 2. Rata-rata jumlah pemakai berdasarkan hari  
 ```{r mean riders by day of week plot}
