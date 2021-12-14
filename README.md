@@ -1,5 +1,5 @@
 # cyclistic-case-study
-Repository ini berisi pengerjaan case study dari Google Data Analytics Specialization.  
+Repository ini berisi sebuah pengerjaan case study dari Google Data Analytics Specialization.  
 Dilakukan lima tahap proses analisis data:
 * Ask
 * Prepare
