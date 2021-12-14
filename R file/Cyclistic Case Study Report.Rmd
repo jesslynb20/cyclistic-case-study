@@ -1,0 +1,249 @@
+---
+title: "Cyclistic Case Study Report"
+author: "Jesslyn"
+date: "12/13/2021"
+output: html_document
+---
+
+# Cyclistic Case Study  
+
+Cyclistic merupakan sebauh perusahaan fiktif yang menawaerkan peminjaman sepeda. Terdapat tiga *pricing plan* yang ditawarkan oleh Cyclistic: *single-ride passes*, *full-day passes*, dan *annual memberships*. Pelanggan yang membeli *single-ride* atau *full-day passes* disebut sebagai *casual riders*. Pelanggan yang membeli *annual membership* disebut *Cyclistic members*.  
+
+Seorang finance analyst dari Cyclistic menyimpulkan bahwa *annual members* lebih menguntungkan daripada *casual riders* walaupun fleksibilitas *pricing plan* membantu Cyclistic menarik banyak pelanggan. Oleh karena itu, jumlah *annual members* ingin dimaksimumkan.  
+
+Dibanding menarik pelanggan baru untuk menjadi *annual members*, finance analyst tersebut percaya bahwa terdapat kesempatan yang bagus untuk mengubah *casual riders* menjadi *annual members* . Oleh karena itu, tujuan dari case study ini adalah mencari cara agar dapat menarik *casual riders* ,emkado *annual members*. 
+
+## Ask
+Terdapat tiga pertanyaan yang perlu dijawab dalam analisis ini agar dapat menemukan cara untuk menerik *casual riders* menjadi *annual members*:  
+1. Apa perilaku yang membedakan *casual riders* dengan *annual memebrs*?  
+2. Menagapa *casual riders* mau membeli *annual membership*?  
+3. Bagaimana cara Cyclistic menggunakan media digital agar dapat mempengaruhi *casual riders* untuk menjadi *annual riders*?
+
+## Prepare
+[Dataset](https://divvy-tripdata.s3.amazonaws.com/index.html) yang digunakan dalam case study ini berasal dari Motivate International Inc. dengan [lisensi](https://www.divvybikes.com/data-license-agreement).
+
+## Process
+Pada bagian ini, dilakukan *data cleaning*. Berikut ini adalah tahap-tahap *data cleaning* dengan emggunakan R:  
+
+1. Mengimport setiap dataset ke RStudio;
+```{r import data}
+data_q1 <- read.csv("Divvy_Trips_2020_Q1.csv")
+data_04 <- read.csv("202004-divvy-tripdata.csv")
+data_05 <- read.csv("202005-divvy-tripdata.csv")
+data_06 <- read.csv("202006-divvy-tripdata.csv")
+data_07 <- read.csv("202007-divvy-tripdata.csv")
+data_08 <- read.csv("202008-divvy-tripdata.csv")
+data_09 <- read.csv("202009-divvy-tripdata.csv")
+data_10 <- read.csv("202010-divvy-tripdata.csv")
+data_11 <- read.csv("202011-divvy-tripdata.csv")
+data_12 <- read.csv("202012-divvy-tripdata.csv")
+```
+
+2. Menggabungkan setiap dataset ke dalam satu variabel;
+```{r trip_data}
+trip_data <- rbind(data_q1, data_04, data_05, data_06, data_07, data_08, data_09, data_10, data_11, data_12)
+```
+
+3. Menghilangkan setiap baris yang yang mengandung NA dan memasukkannya ke dalam variabel baru;
+```{r no_null_trip_data}
+no_null_trip_data <- na.omit(trip_data)
+```
+
+4. Mengambil setiap baris dengan ended_at > started_at;
+```{r ended_at > started_at}
+no_null_trip_data <- subset(no_null_trip_data, ended_at > started_at)
+```
+
+5. Menambah tiga kolom baru pada no_null_trip data, yaitu ride_length (jarak antara ended_at dan started_at), day_of_week (hari pada started_at), dan month (bulan pada started_at).
+```{r kolom baru}
+library(lubridate)
+no_null_trip_data$ride_length <- difftime(ymd_hms(no_null_trip_data$ended_at),ymd_hms(no_null_trip_data$started_at), units = "secs")
+no_null_trip_data$day_of_week <- wday(as.Date(no_null_trip_data$started_at))
+no_null_trip_data$month <- month(as.Date(no_null_trip_data$started_at))
+```
+
+## Analyze
+Pada bagian ini, dilakukan analisis data. Berikut ini adalah tahap-tahao analisis dengan menggunakan R:  
+
+1. Memanggil dplyr dan lubridate yang akan digunakan sepanjang analisis ini;  
+```{r packages}
+library(dplyr)
+library(lubridate)
+```
+
+2. Membuat fungsi modus yang akan digunakan dalam analisis ini:
+```{r mode function}
+mode = function(x) {
+  data.frame(sort(-table(x)))[1,1]
+}
+```
+
+3. Mencari hari apa yang paling banyak terdapat peminjaman sepeda dari *casual riders* dan *annual members*. Hal ini dilakukan dengan mencari modus. Keterangan untuk day_of_week: 1 adalah hari Minggu;
+```{r mode of day of week}
+mode_day_of_week <- no_null_trip_data %>% 
+  group_by(member_casual) %>% 
+  summarise(mode = mode(day_of_week))
+print(mode_day_of_week)
+```
+
+4. Mencari rata-rata jumlah pemakai sepeda per hari;
+```{r mean riders by day of week}
+number_of_riders <- no_null_trip_data %>% 
+  group_by(day_of_week) %>% 
+  count(member_casual)
+unique_date <- unique(as.Date(no_null_trip_data$started_at))
+number_of_days <- data.frame(table(wday(unique_date)))
+casual <- filter(number_of_riders, member_casual=="casual")
+member<- filter(number_of_riders, member_casual=="member")
+casual$mean_riders <- casual$n / number_of_days$Freq
+member$mean_riders <- member$n / number_of_days$Freq
+mean_riders_per_day <- rbind(casual, member)
+print(mean_riders_per_day)
+```
+
+5. Mencari tipe sepeda apa yang paling banyak dipinjam oleh *casual riders* dan *annual members*. Hal ini juga dilakukan dengan mencari modus. 
+```{r mode of rideable type}
+mode_rideable_type <- no_null_trip_data %>% 
+  group_by(member_casual) %>% 
+  summarise(mode = mode(rideable_type))
+print(mode_rideable_type)
+```
+
+6. Mencari tipe sepeda apa yang paling banyak dipinjam oleh *casual riders* dan *annual members* untuk setiap harinya. Hal ini untuk melihat apakah ada trend. Keterangan untuk day_of_week: 1 adalah hari Minggu;
+```{r mode ridable type by day of week}
+mode_rideable_type_day_of_week <- no_null_trip_data %>% 
+  group_by(member_casual, day_of_week) %>% 
+  summarise(mode = mode(rideable_type))
+print(mode_rideable_type_day_of_week)
+```
+
+7. Mencari rata-rata jumlah pemakai per hari berdasarkan tipe sepeda;
+```{r mean riders by rideable type}
+number_of_riders_rideable_type <- no_null_trip_data %>% 
+  group_by(rideable_type) %>% 
+  count(member_casual)
+mean_riders_rideable_type <- number_of_riders_rideable_type
+mean_riders_rideable_type$mean_riders <- number_of_riders_rideable_type$n / 364
+print(mean_riders_rideable_type)
+```
+8. Mencari mean, min, dan max dari ride_length dari *casual riders* dan *annual members*;
+```{r mean min max}
+mean_min_max<- no_null_trip_data %>% 
+  group_by(member_casual) %>% 
+  summarise(mean = mean(ride_length),min = min(ride_length), max =max(ride_length))
+
+mean_min_max$mean <- seconds_to_period(mean_min_max$mean)
+mean_min_max$min <- seconds_to_period(mean_min_max$min)
+mean_min_max$max <- seconds_to_period(mean_min_max$max)
+print(mean_min_max)
+```
+9. Mencari mean, min, dan max dari ride_length dari *casual riders* dan *annual members* untuk setiap harinya. Hal ini untuk melihat apakah ada trend. Keterangan untuk day_of_week: 1 adalah hari Minggu;
+```{r mean min max day of week}
+mean_min_max_day_of_week<- no_null_trip_data %>% 
+  group_by(member_casual, day_of_week) %>% 
+  summarise(mean = mean(ride_length),min = min(ride_length), max =max(ride_length))
+
+mean_min_max_day_of_week$mean <- seconds_to_period(mean_min_max_day_of_week$mean)
+mean_min_max_day_of_week$min <- seconds_to_period(mean_min_max_day_of_week$min)
+mean_min_max_day_of_week$max <- seconds_to_period(mean_min_max_day_of_week$max)
+print(mean_min_max_day_of_week)
+```
+10. Mencari jumlah pemakai untuk setiap bulan.
+```{r number of riders by months}
+number_of_riders_per_month <- no_null_trip_data %>% 
+  group_by(month) %>% 
+  count(member_casual)
+print(number_of_riders_per_month)
+```
+
+## Share
+Pada bagian ini, dilakukasi visualisasi data. Berikut ini adalah beberapa plot beserta penjelasannya:  
+
+1.Jumlah pemakai berdasarkan hari  
+```{r number of riders by day of week plot}
+library(ggplot2)
+
+ggplot(data = number_of_riders, aes(x = factor(day_of_week), y = n, fill = member_casual)) + geom_bar(position ="dodge", stat="identity") +
+  scale_x_discrete(name = "Day of Week" ,labels = c("1"="Sunday", "2"="Monday", "3"="Tuesday", "4"="Wednesday", "5"="Thursday", "6"="Friday", "7"="Saturday")) +
+  ylab("Number of Riders") + 
+  labs(title = "Number of Riders by Day of Week (2020-01 to 2020-12)")
+```  
+
+Plot di atas memberikan beberapa informasi berikut:  
+
+a. Jumlah *casual riders* terbanyak pada hari *weekends* dalam peiode Januari 2020 hingga Desember 2020;  
+b. Jumlah *casual riders* jauh lebih rendah pada hari *weekdays* dalam periode Januari 2020 hingga Desember 2020;  
+c. Jumlah *annual members* terbanyak pada hari *weekdays* dalam periode Januari 2020 hingga Desember 2020;  
+d. Jumlah *annual members* pada hari *weekends* lebih rendah dibanding pada hari *weekdays*, tetapi perbedaannya tidak begitu jauh.
+
+2. Rata-rata jumlah pemakai berdasarkan hari  
+```{r mean riders by day of week plot}
+ggplot(data = mean_riders_per_day, aes(x = factor(day_of_week), y = mean_riders, fill = member_casual)) + geom_bar(position ="dodge", stat="identity") +
+  scale_x_discrete(name = "Day of Week" ,labels = c("1"="Sunday", "2"="Monday", "3"="Tuesday", "4"="Wednesday", "5"="Thursday", "6"="Friday", "7"="Saturday")) +
+  ylab("Number of RIders") + 
+  labs(title = "Average Number of Riders per Day by Day of Week")
+```  
+
+Plot di atas memberikan beberapa informasi berikut:  
+
+a. Rata-rata jumlah *casual riders* terbesar berada pada hari *weekends*;  
+b. Rata-rata jumlah *casual riders* jauh lebih rendah pada hari *weekdays* ;  
+c. Rata-rata jumlah *annual members* terbesar berada pada hari *weekdays*;  
+d. Rata-rata jumlah *annual members* pada hari *weekends* lebih rendah dibanding pada hari *weekdays*, tetapi perbedaannya tidak begitu jauh.  
+
+3. Jumlah pemakai berdasarkan tipe sepeda  
+```{r number of riders by rideable type plot}
+ggplot(data = number_of_riders_rideable_type, aes(x = rideable_type, y = n, fill = member_casual)) + 
+  geom_bar(position ="dodge", stat="identity") +
+  labs(title = "Number of Riders by Rideable Type (2020-01 to 2020-12)") + 
+  xlab("Rideable Type") + 
+  ylab("Number of Riders")
+```  
+
+Plot di atas memberikan beberapa informasi berikut:  
+
+a. *Casual riders* paling banyak menggunakan *docked bike* dalam peiode Januari 2020 hingga Desember 2020;  
+b. *Annual members* paling banyak menggunakan *dockded bike*dalam peiode Januari 2020 hingga Desember 2020;  
+c. *Docked bike* merupakan tipe sepeda yang paling populer dalam peiode Januari 2020 hingga Desember 2020.  
+
+4. Rata-rata jumlah pemakai berdasarkan tipe sepeda  
+```{r avareage number of riders by rideable type plot} 
+ggplot(data = mean_riders_rideable_type, aes(x = rideable_type, y = mean_riders, fill = member_casual)) + 
+  geom_bar(position ="dodge", stat="identity") +
+  labs(title = " Average Number of Riders per Day by Rideable Type") + 
+  xlab("Rideable Type") + 
+  ylab("Number of Riders")
+```  
+
+Plot di atas memberikan beberapa informasi berikut:  
+
+a. *casual riders* paling banyak menggunakan *docked bike*;  
+b. *Annual members* paling banyak menggunakan *dockded bike*;  
+c. *Docked bike* merupakan tipe sepeda yang paling populer.  
+
+5. Jumlah pemakai berdasarkan bulan  
+```{r number of riders by months plot}
+ggplot(data = number_of_riders_per_month, aes(x = as.numeric(month), y = n, color = member_casual)) + geom_line() + labs(title = "Number of Riders by Months") +
+  scale_x_discrete(name = "Month", limits = c(1,2,3,4,5,6,7,8,9,10,11,12)) + 
+  ylab("Number of Riders")
+```  
+
+Plot di atas memberikan beberapa informasi berikut:  
+
+a. Terjadi lonjakan jumlah *casual riders* pada liburan musim panas;  
+b. Terjadi lonjakan jumlah *annual members* pada libruan musim panas;  
+c. Selama 12 bulan, jumlah *annual memberss* selalu lebih banyak daripada jumlah *casual riders*.
+
+## Act
+Pada tahap ini, diberikan rekomendasi-rekomendasi berdasarkan hasil analisis. Untuk dapat memberikan rekomendasi, pertanyaan-pertanyaan pada tahap **Ask** perlu dijawab. Berikut ini adalah jawaban berdasarkan hasil analisis: 
+
+1. *Casual riders* cenderung melakukan peminjaman sepeda pada hari libur, sedangkan *annual members* cenderung melakukan peminjaman sepeda pada hari kerja. Selain itu, *casual riders* cenderung untuk bersepeda dalam waktu yang lama dibandingkan dengan *annual members*. Kemungkinan besar hal ini terjadi karena *casual riders* menggunakan sepeda untuk rekereasi, sedangkan *annual members* menggunakan sepeda untuk kegiatan sehari-hari.  
+2. Alasan yang mungkin untuk *casual_riders* menjadi *annual members* adalah *annual membership* sesuai dengan kebutuhan mereka terkait penggunaan sepeda. Jika *casual riders* menggunakan sepeda untuk sehari-hari, maka *casual riders* sangat mungkin untuk membeli *annual membership*.  
+3. Cyclistic dapat menggunakan media digital untuk melakukan promosi.  
+
+Berdasarkan jawaban di atas, saya memberikan beberapa rekomendasi berikut:
+
+1. Membuat *pricing plans* baru yang menargetkan pelanggan yang menggunakan sepeda di hari *weekends*. Hal itu bisa *annual membership* khusus untuk penggunaaan di hari *weekends* dan/atau *weekends passes*;   
+2. Membuat sistem *rewards* berdasarkan penggunaan sepeda sehingga dapat menarik pelanggan untuk tetap melakukan peminjaman sepeda. Hal ini untuk mendorong *casual riders* untuk membeli *annual membership*;
+3. Melihat *casual riders* yang cenderung melakukan peminjaman sepeda pada hari libur, Cyclistic dapat mencoba untuk melakukan promosi melaui media digital pada musim liburan atau hari *weekends*
+
